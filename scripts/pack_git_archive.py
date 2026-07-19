@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Pack a clean Git/Cloudflare-ready archive (Astro source, no node_modules/dist)."""
+"""Pack a clean Git/Cloudflare-ready archive (Astro source, no node_modules/dist).
+
+Run after every project change:
+  python scripts/pack_git_archive.py
+  npm run pack-archive
+"""
 
 import shutil
 import zipfile
@@ -56,27 +61,31 @@ def copy_tree(src: Path, dst: Path) -> int:
 
 def write_notes() -> None:
     notes = ARCHIVE_DIR / "ARCHIVE-NOTES.txt"
+    built = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     notes.write_text(
-        """onlinecasinoexperte.org — archive notes
+        f"""onlinecasinoexperte.org — archive notes
 =========================================
+Last packed: {built}
+
+Regenerate after any change:
+  npm run pack-archive
 
 onlinecasinoexperte-astro-git.zip / git-repo/
   Ready to push to GitHub -> Cloudflare Pages.
   Contains: src/, public/, scripts/, mirror/, reports/, configs.
-  Does NOT contain: node_modules, dist, .tools (Cloudflare runs npm ci && npm run build).
+  Does NOT contain: node_modules, dist, .tools
 
 wayback-versiya-vp.zip
   Full Wayback mirror backup (~31 MB). Keep locally, do not push to Git.
 
 onlinecasinoexperte-wp-files.zip
-  Old partial WP folders from root cleanup. Checked: mostly empty dirs +
-  Wayback error stubs (145 KB placeholders), NOT needed. Real assets are in
-  public/wp-content/ and mirror/wp-content/.
+  Old partial WP folders. NOT needed.
 
-Cloudflare build:
-  Command: npm ci && npm run build
-  Output:  dist
-  Node:    22
+Cloudflare Pages:
+  Build:  npm ci && npm run build
+  Output: dist
+  Deploy: (empty) or npm run deploy
+  Node:   22
 """,
         encoding="utf-8",
     )

@@ -6,6 +6,7 @@
 |----------|----------|
 | Build command | `npm ci && npm run build` |
 | Build output directory | `dist` |
+| Deploy command | *(оставить пустым)* или `npm run deploy` |
 | Node.js version | 22 |
 
 Custom domain: `onlinecasinoexperte.org` + `www` (redirect на apex).
