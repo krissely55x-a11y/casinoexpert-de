@@ -10,7 +10,8 @@
     "prebuild": "node scripts/remove-template-junk.mjs",
     "dev": "astro dev",
     "build": "astro build",
-    "deploy": "node -e \"console.log('Static site ready: dist/ is published by Cloudflare Pages.')\"",
+    "deploy": "node scripts/deploy.mjs",
+    "verify:cf": "node scripts/verify-cloudflare.mjs --build",
     "pack-archive": "python scripts/pack_git_archive.py",
     "preview": "astro preview",
     "astro": "astro"

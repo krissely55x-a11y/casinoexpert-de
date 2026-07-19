@@ -6,8 +6,14 @@
 |----------|----------|
 | Build command | `npm ci && npm run build` |
 | Build output directory | `dist` |
-| Deploy command | *(оставить пустым)* или `npm run deploy` |
+| Deploy command | `npm run deploy` *(или оставить пустым — тогда dist публикуется автоматически)* |
 | Node.js version | 22 |
+
+**Важно:** если в логе `Missing script: "deploy"` — в GitHub старый `package.json`.
+Залей актуальный архив `archive/onlinecasinoexperte-astro-git.zip` или минимум:
+`package.json`, `scripts/deploy.mjs`, `scripts/remove-template-junk.mjs`.
+
+Проверка локально: `npm run verify:cf`
 
 Custom domain: `onlinecasinoexperte.org` + `www` (redirect на apex).
 

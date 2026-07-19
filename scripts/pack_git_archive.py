@@ -27,6 +27,8 @@ INCLUDE_FILES = (
     "wrangler.toml",
 )
 
+REQUIRED_SCRIPTS = ("prebuild", "build", "deploy")
+
 EXCLUDE_DIR_NAMES = {"node_modules", "dist", ".astro", ".git", "__pycache__"}
 EXCLUDE_FILE_SUFFIXES = {".zip", ".log"}
 
@@ -123,6 +125,18 @@ def main() -> None:
         shutil.move(str(wp_root), str(wp_archive))
 
     write_notes()
+
+    import json
+
+    pkg = json.loads((OUT_DIR / "package.json").read_text(encoding="utf-8"))
+    missing = [s for s in REQUIRED_SCRIPTS if s not in pkg.get("scripts", {})]
+    if missing:
+        raise SystemExit(f"Archive validation failed: missing scripts {missing}")
+
+    for req in ("scripts/deploy.mjs", "scripts/remove-template-junk.mjs"):
+        if not (OUT_DIR / req).exists():
+            raise SystemExit(f"Archive validation failed: missing {req}")
+
     size_mb = OUT_ZIP.stat().st_size / 1024 / 1024
     print(f"Packed {total} files")
     print(f"Folder: {OUT_DIR}")
